@@ -1,0 +1,39 @@
+name: Agent Instruction Analysis
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze Agent Instructions & Changed Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 is required so git history is available for base diffing
+          fetch-depth: 0
+
+      - name: Run AgentRuleMap
+        id: agentrulemap
+        uses: ./
+        with:
+          profile: all
+          fail-on: error
+          output: summary
+          sarif-file: agentrulemap.sarif
+          pr-comment: false
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('agentrulemap.sarif') != ''
+        with:
+          sarif_file: agentrulemap.sarif

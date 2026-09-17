@@ -1,0 +1,6 @@
+{
+  "name": "AgentReady",
+  "description": "Deterministic engine to discover AI coding-agent instruction files, resolve scopes, detect conflicts, map coverage, and analyze pull request impact.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

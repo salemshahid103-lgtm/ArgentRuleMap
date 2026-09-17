@@ -1,0 +1,30 @@
+name: Feature Request
+description: Propose an enhancement, new profile adapter, or new diagnostic rule
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make AgentRuleMap better? We welcome proposals that enhance instruction modeling and CI workflows.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement / Use Case
+      description: Is your feature request related to a specific challenge or limitation?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution or Specification
+      description: Describe the solution you would like to see implemented.
+    validations:
+      required: true
+  - type: textarea
+    id: vendor_docs
+    attributes:
+      label: Relevant Documentation / Standards
+      description: If proposing a new agent profile or rule, link to public documentation or specifications.
+    validations:
+      required: false

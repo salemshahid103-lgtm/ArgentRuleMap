@@ -1,0 +1,57 @@
+name: 'AgentRuleMap'
+description: 'Deterministic AI coding-agent instruction discovery, conflict detection, and pull-request changed-file analysis'
+author: 'AgentRuleMap'
+branding:
+  icon: 'map-pin'
+  color: 'blue'
+
+inputs:
+  base:
+    description: 'Git base reference used for changed-file comparison (e.g. main, origin/main, HEAD~1). Automatically detected in pull request workflows if omitted.'
+    required: false
+  profile:
+    description: 'Agent instruction profile to evaluate: codex, copilot, gemini, generic, or all'
+    required: false
+    default: 'all'
+  fail-on:
+    description: 'Failure policy: never, error, warning'
+    required: false
+    default: 'error'
+  output:
+    description: 'Primary output reporting mode: summary, sarif, json'
+    required: false
+    default: 'summary'
+  sarif-file:
+    description: 'File path to write SARIF 2.1.0 output to'
+    required: false
+    default: 'agentrulemap.sarif'
+  pr-comment:
+    description: 'Whether to post or update a sticky pull request comment with findings (opt-in: true/false)'
+    required: false
+    default: 'false'
+  github-token:
+    description: 'GitHub token for optional pull request commenting'
+    required: false
+    default: ${{ github.token }}
+  cwd:
+    description: 'Target directory inside repository (default: current directory)'
+    required: false
+    default: '.'
+
+outputs:
+  changed-files:
+    description: 'Number of changed files analyzed'
+  instruction-sources:
+    description: 'Number of instruction sources governing changed files'
+  error-count:
+    description: 'Total error-level diagnostics count'
+  warning-count:
+    description: 'Total warning-level diagnostics count'
+  profiles:
+    description: 'Comma-separated profiles evaluated'
+  sarif-file:
+    description: 'File path of generated SARIF 2.1.0 report'
+
+runs:
+  using: 'node20'
+  main: 'dist/action/index.cjs'

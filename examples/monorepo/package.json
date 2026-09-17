@@ -1,0 +1,11 @@
+{
+  "name": "example-monorepo",
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "node --test"
+  }
+}

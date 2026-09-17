@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentrulemap.dev/schema/v1/report.schema.json",
+  "title": "AgentRuleMap Analysis Report",
+  "description": "Deterministic JSON output emitted by AgentRuleMap commands (scan, resolve, conflicts, coverage, changed).",
+  "oneOf": [
+    { "$ref": "#/$defs/ConflictReport" },
+    { "$ref": "#/$defs/ChangedReport" },
+    { "$ref": "#/$defs/CoverageReport" },
+    { "$ref": "#/$defs/ResolutionReport" },
+    { "$ref": "#/$defs/ScanReport" }
+  ],
+  "$defs": {
+    "DiagnosticSeverity": {
+      "type": "string",
+      "enum": ["info", "warning", "error"]
+    },
+    "Diagnostic": {
+      "type": "object",
+      "required": ["id", "severity", "message"],
+      "properties": {
+        "id": { "type": "string" },
+        "severity": { "$ref": "#/$defs/DiagnosticSeverity" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "sourcePath": { "type": "string" },
+        "targetPath": { "type": "string" },
+        "line": { "type": "integer", "minimum": 1 },
+        "column": { "type": "integer", "minimum": 1 },
+        "remediation": { "type": "string" },
+        "profile": { "type": "string" },
+        "details": {}
+      }
+    },
+    "Specificity": {
+      "type": "object",
+      "required": ["depth", "priority", "score"],
+      "properties": {
+        "depth": { "type": "integer", "minimum": 0 },
+        "priority": { "type": "integer" },
+        "isOverride": { "type": "boolean" },
+        "hasPattern": { "type": "boolean" },
+        "score": { "type": "integer" }
+      }
+    },
+    "InstructionScope": {
+      "type": "object",
+      "required": ["kind", "root"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["repository", "directory", "glob", "informational"] },
+        "root": { "type": "string" },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rawApplyTo": { "type": "string" }
+      }
+    },
+    "InstructionSource": {
+      "type": "object",
+      "required": ["id", "profile", "sourceType", "filePath", "absolutePath", "scopeRoot", "scope", "specificity", "parsingState", "diagnostics"],
+      "properties": {
+        "id": { "type": "string" },
+        "profile": { "type": "string", "enum": ["codex", "copilot", "gemini", "generic"] },
+        "sourceType": { "type": "string", "enum": ["root", "directory", "override", "file-pattern", "informational"] },
+        "filePath": { "type": "string" },
+        "absolutePath": { "type": "string" },
+        "scopeRoot": { "type": "string" },
+        "scope": { "$ref": "#/$defs/InstructionScope" },
+        "specificity": { "$ref": "#/$defs/Specificity" },
+        "rawContent": { "type": "string" },
+        "parsingState": { "type": "string", "enum": ["parsed", "warning", "error"] },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Diagnostic" }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "ConflictReport": {
+      "type": "object",
+      "required": ["schemaVersion", "command", "profile", "repositoryRoot", "diagnostics", "summary"],
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "command": { "type": "string", "const": "conflicts" },
+        "profile": { "type": "string" },
+        "repositoryRoot": { "type": "string" },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Diagnostic" }
+        },
+        "summary": {
+          "type": "object",
+          "required": ["total", "errors", "warnings", "info"],
+          "properties": {
+            "total": { "type": "integer", "minimum": 0 },
+            "errors": { "type": "integer", "minimum": 0 },
+            "warnings": { "type": "integer", "minimum": 0 },
+            "info": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "deterministicModeNotice": { "type": "string" }
+      }
+    },
+    "ChangedReport": {
+      "type": "object",
+      "required": ["schemaVersion", "command", "repositoryRoot", "comparison", "summary", "changedInstructionFiles", "scopeSummary", "files", "diagnostics"],
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "command": { "type": "string", "const": "changed" },
+        "repositoryRoot": { "type": "string" },
+        "comparison": { "type": "object" },
+        "summary": { "type": "object" },
+        "changedInstructionFiles": { "type": "array" },
+        "scopeSummary": { "type": "object" },
+        "files": { "type": "array" },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Diagnostic" }
+        },
+        "deterministicModeNotice": { "type": "string" }
+      }
+    },
+    "CoverageReport": {
+      "type": "object",
+      "required": ["schemaVersion", "command", "repositoryRoot", "profiles"],
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "command": { "type": "string", "const": "coverage" },
+        "repositoryRoot": { "type": "string" },
+        "profiles": { "type": "object" },
+        "deterministicModeNotice": { "type": "string" }
+      }
+    },
+    "ResolutionReport": {
+      "type": "object",
+      "required": ["targetPath", "profile", "matchedSources", "rejectedSources", "stack", "diagnostics"],
+      "properties": {
+        "targetPath": { "type": "object" },
+        "profile": { "type": "string" },
+        "matchedSources": { "type": "array" },
+        "rejectedSources": { "type": "array" },
+        "stack": { "type": "object" },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Diagnostic" }
+        }
+      }
+    },
+    "ScanReport": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/InstructionSource" }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "valid-fixture",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

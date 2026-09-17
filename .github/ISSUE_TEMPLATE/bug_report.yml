@@ -1,0 +1,47 @@
+name: Bug Report
+description: Report a defect, incorrect resolution, or unexpected error in AgentRuleMap
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please ensure you are not submitting a security vulnerability here. For security issues, refer to [SECURITY.md](https://github.com/agentrulemap/agentrulemap/blob/main/SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: AgentRuleMap Version
+      description: What version of AgentRuleMap are you using? (e.g., run `npx agentrulemap --version`)
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS version, Node.js version, npm version
+      placeholder: "macOS 14.2 / Node 20.11 / npm 10.2"
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command Executed
+      description: What exact command did you execute?
+      placeholder: "npx agentrulemap explain src/api/users.ts --profile codex"
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Current Behavior vs Expected Behavior
+      description: A clear description of what happened versus what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal Reproduction Steps / Fixture
+      description: Steps or minimal repository file layout to reproduce the issue.
+    validations:
+      required: true

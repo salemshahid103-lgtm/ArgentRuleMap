@@ -1,0 +1,36 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "rootDir": "./src",
+    "outDir": "./dist/types",
+    "allowImportingTsExtensions": false,
+    "types": ["node"]
+  },
+  "include": [
+    "src/index.ts",
+    "src/types/**/*",
+    "src/core/**/*",
+    "src/coverage/**/*",
+    "src/changed/**/*",
+    "src/diagnostics/**/*",
+    "src/adapters/**/*",
+    "src/reporters/**/*",
+    "src/scanners/**/*",
+    "src/utils/**/*",
+    "src/rules/**/*",
+    "src/globs/**/*",
+    "src/git/**/*",
+    "src/security/**/*",
+    "src/generators/**/*",
+    "src/version.ts"
+  ],
+  "exclude": [
+    "src/App.tsx",
+    "src/main.tsx",
+    "src/action/**/*",
+    "tests/**/*"
+  ]
+}
